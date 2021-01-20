@@ -25,8 +25,6 @@ class AddCustomer():
             self.AddNewCustomer()
         elif self.configdata['type'] ==2:
             self.AddGroupCustomer()
-        elif self.configdata['type'] ==3:
-            self.Testfrequency()
         self.WriteLog('程序执行-结束')
         return
     
