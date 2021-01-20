@@ -161,7 +161,6 @@ class AddCustomer():
                     break
 
                 pyautogui.press('enter')
-                time.sleep(random.randint(2,5))
 
                 #鼠标点击好友添加
                 AddPointArray = self.GetAllPointOfPicture("Add")
@@ -184,7 +183,6 @@ class AddCustomer():
                     #粘贴文案
                     pyautogui.click(ClearX-20,ClearY)
                     pyautogui.hotkey('ctrl', 'v')
-                time.sleep(random.randint(2,5))
 
                 #点击发送按钮
                 SendX,SendY = self.GetOnePointOfPicture("Send",number=i+1,identify=phonedata[i]["phone"])
@@ -194,11 +192,11 @@ class AddCustomer():
                     self.exclhandle.write_excl(phonedata[i])
                 else:
                     break
-                time.sleep(random.randint(2,5))
+                time.sleep(random.randint(self.configdata['time1']-10,self.configdata['time2']-10))
                     
                 i = i+1
         except Exception as ex_results:
-            self.WriteLog("程序终止,抓了一个异常：",ex_results,)
+            self.WriteLog("程序终止,抓了一个异常："+ ex_results,)
             self.WriteLog('鼠标移至屏幕左上角坐标(0,0),程序中断！')           
 
     def GetOnePointOfPicture(self,PictureName,OTx = 0,OTy =0,X=0,Y=0,number=0,identify=''):
