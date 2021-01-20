@@ -125,7 +125,7 @@ class AddCustomer():
                         self.WriteLog("该客户以添加为好友！")
                         continue
         except Exception as ex_results:
-            self.WriteLog("程序终止,抓了一个异常：",ex_results,)
+            self.WriteLog("程序终止,抓了一个异常："+ex_results,)
             self.WriteLog('鼠标移至屏幕左上角坐标(0,0),程序中断！')
 
     #添加新客户
