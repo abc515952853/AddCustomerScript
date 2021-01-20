@@ -38,32 +38,6 @@ class AddCustomer():
         #客户端展示
         self.loghandle.insert(1.0,time.strftime("%Y-%m-%d %H:%M:%S\n", time.localtime())+logdata + "\n")
         self.loghandle.update()
-
-    def Testfrequency(self):
-        SearchX,SearchY = 0,0
-        FrequencyX,FrequencyY =0,0
-        try:
-            time1 = int(self.configdata['word'])
-            everytime = 3600/time1
-            time.sleep(5)
-            i = 1
-            while True:
-                #鼠标点击搜索
-                SearchX,SearchY = self.GetOnePointOfPicture("Search")
-                if SearchX != 0 or SearchY != 0:
-                    pyautogui.click(SearchX,SearchY)
-                    self.WriteLog("点击第"+str(i)+"次")
-                    i = i+1
-                else:
-                    FrequencyX,FrequencyY = self.GetOnePointOfPicture("Frequency")
-                    if FrequencyX != 0 or FrequencyY != 0:
-                        self.WriteLog("添加还有过于频繁@")
-                        break             
-                time.sleep(random.randint(everytime-10,everytime+10))
-
-        except Exception as ex_results:
-            self.WriteLog("程序终止,抓了一个异常：",ex_results,)
-            self.WriteLog('鼠标移至屏幕左上角坐标(0,0),程序中断！')
         
     #添加群客户--通过滑动添加
     def AddGroupCustomer(self):

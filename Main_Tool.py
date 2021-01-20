@@ -30,8 +30,6 @@ class MY_GUI():
         self.radiobutton_type_one.place(x=150,y=30)
         self.radiobutton_type_group = Radiobutton(self.mywindow, text='添加群客户', value=2, variable=self.type_default)
         self.radiobutton_type_group.place(x=250,y=30)
-        self.radiobutton_type_group = Radiobutton(self.mywindow, text='频率测试', value=3, variable=self.type_default)
-        self.radiobutton_type_group.place(x=350,y=30)
         self.type_default.set(1)
 
         self.word_default = StringVar()
