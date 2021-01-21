@@ -39,7 +39,7 @@ class AddCustomer():
         
     #添加群客户--通过滑动添加
     def AddGroupCustomer(self):
-        # try:
+        try:
             MemX,MemY = 0,0,
             WehcatY,WehcatY = 0,0
             MemberPointArray =[]
@@ -96,7 +96,7 @@ class AddCustomer():
                         else:
                             self.WriteLog("该客户以添加为好友！")
                             continue
-                        
+
                         if memberpoint == MemberPointArray[-1]:
                             #最后一个截取图片
                             pyautogui.screenshot(os.getcwd()+'\\Picture\\contrast.png', region=(memberpoint['pointx']-10,memberpoint['pointy']-10,150,20))
@@ -117,11 +117,10 @@ class AddCustomer():
                             break
                 else:
                     break
-
-        # except Exception as ex_results:
-            # print(str(ex_results))
-            # self.txthandle.write_txt(str(ex_results))
-            # self.WriteLog('鼠标移至屏幕左上角坐标(0,0),程序中断！')
+        except Exception as ex_results:
+            print(str(ex_results))
+            self.txthandle.write_txt(str(ex_results))
+            self.WriteLog('鼠标移至屏幕左上角坐标(0,0),程序中断！')
 
     #添加新客户
     def AddNewCustomer(self):
