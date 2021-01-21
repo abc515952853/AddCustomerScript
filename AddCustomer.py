@@ -70,6 +70,33 @@ class AddCustomer():
                     for memberpoint in MemberPointArray:
                         #鼠标移动到成员上
                         pyautogui.click(memberpoint['pointx'],memberpoint['pointy'])
+
+                        #点击添加按钮
+                        AddContactX,AddContactY = self.GetOnePointOfPicture("AddContact")
+                        if AddContactX != 0 or AddContactY != 0:
+                            pyautogui.click(AddContactX,AddContactY)
+
+                            #添加文案
+                            ClearX,ClearY = self.GetOnePointOfPicture("Clear")
+                            if ClearX != 0 or ClearY != 0:
+                                pyautogui.click(ClearX,ClearY)
+                            else:
+                                break
+
+                            #粘贴文案
+                            pyautogui.click(ClearX-20,ClearY)
+                            pyautogui.hotkey('ctrl', 'v')
+
+                            #点击发送按钮
+                            SendX,SendY = self.GetOnePointOfPicture("Send")
+                            if SendX != 0 or SendY != 0:  
+                                pyautogui.click(SendX,SendY)
+                            else:
+                                break
+                        else:
+                            self.WriteLog("该客户以添加为好友！")
+                            continue
+                        
                         if memberpoint == MemberPointArray[-1]:
                             #最后一个截取图片
                             pyautogui.screenshot(os.getcwd()+'\\Picture\\contrast.png', region=(memberpoint['pointx']-10,memberpoint['pointy']-10,150,20))
@@ -91,31 +118,6 @@ class AddCustomer():
                 else:
                     break
 
-                    # #点击添加按钮
-                    # AddContactX,AddContactY = self.GetOnePointOfPicture("AddContact")
-                    # if AddContactX != 0 or AddContactY != 0:
-                    #     pyautogui.click(AddContactX,AddContactY)
-
-                    #     #添加文案
-                    #     ClearX,ClearY = self.GetOnePointOfPicture("Clear")
-                    #     if ClearX != 0 or ClearY != 0:
-                    #         pyautogui.click(ClearX,ClearY)
-                    #     else:
-                    #         break
-
-                    #     #粘贴文案
-                    #     pyautogui.click(ClearX-20,ClearY)
-                    #     pyautogui.hotkey('ctrl', 'v')
-
-                    #     #点击发送按钮
-                    #     SendX,SendY = self.GetOnePointOfPicture("Send")
-                    #     if SendX != 0 or SendY != 0:  
-                    #         pyautogui.click(SendX,SendY)
-                    #     else:
-                    #         break
-                    # else:
-                    #     self.WriteLog("该客户以添加为好友！")
-                    #     continue
         # except Exception as ex_results:
             # print(str(ex_results))
             # self.txthandle.write_txt(str(ex_results))
