@@ -39,66 +39,87 @@ class AddCustomer():
         
     #添加群客户--通过滑动添加
     def AddGroupCustomer(self):
-        try:
+        # try:
+            MemX,MemY = 0,0,
             WehcatY,WehcatY = 0,0
             MemberPointArray =[]
+            OldMemberPointArray = []
             
             AddContactX,AddContactY = 0,0
             ClearX,ClearY = 0,0
             SendX,SendY = 0,0
+            SliderX,SliderY = 0,0
+            ContrastX,ContrastY = 0,0
+            ContrastXX,ContrastYY =0,0
 
             pyperclip.copy(self.configdata['word'])
-
             path = os.getcwd()
 
-            #获取微信标识坐标
-            WehcatX,WehcatY= self.GetOnePointOfPicture("grouptop")
-            if WehcatX != 0 or WehcatY != 0:
-                pyautogui.click(WehcatX,WehcatY)
-            else:
-                return 
-        
-            #获取所有当页成员的坐标
-            MemberPointArray1 = self.GetAllPointOfPicture("Member1")
-            MemberPointArray2 = self.GetAllPointOfPicture("Member2")
-            #冒泡排序下
-            MemberPointArray = self.BubbleSort(MemberPointArray1,MemberPointArray2,WehcatY)
-            if len(MemberPointArray) ==0:
-                self.WriteLog('成员图片没有再屏幕出现,程序中断')
-                return 
-            else:
-                for memberpoint in MemberPointArray:
-                    #鼠标移动到成员上
-                    pyautogui.click(memberpoint['pointx'],memberpoint['pointy'])
-
-                    #点击添加按钮
-                    AddContactX,AddContactY = self.GetOnePointOfPicture("AddContact")
-                    if AddContactX != 0 or AddContactY != 0:
-                        pyautogui.click(AddContactX,AddContactY)
-
-                        #添加文案
-                        ClearX,ClearY = self.GetOnePointOfPicture("Clear")
-                        if ClearX != 0 or ClearY != 0:
-                            pyautogui.click(ClearX,ClearY)
+            while True:
+                #获取所有当页成员的坐标
+                MemberPointArray1 = self.GetAllPointOfPicture("Member1")
+                MemberPointArray2 = self.GetAllPointOfPicture("Member2")
+                #冒泡排序下
+                MemberPointArray = self.BubbleSort(MemberPointArray1,MemberPointArray2,ContrastYY)
+                if MemberPointArray == OldMemberPointArray:
+                    break
+                if len(MemberPointArray) ==0:
+                    self.WriteLog('成员图片没有再屏幕出现,程序中断')
+                    return 
+                else:
+                    for memberpoint in MemberPointArray:
+                        #鼠标移动到成员上
+                        pyautogui.click(memberpoint['pointx'],memberpoint['pointy'])
+                        if memberpoint == MemberPointArray[-1]:
+                            #最后一个截取图片
+                            pyautogui.screenshot(os.getcwd()+'\\Picture\\contrast.png', region=(memberpoint['pointx']-10,memberpoint['pointy']-10,150,20))
+                OldMemberPointArray = MemberPointArray
+                SliderX,SliderY = self.GetOnePointOfPicture("Slider")
+                if SliderX != 0 or SliderY != 0:
+                    pyautogui.moveTo(SliderX,SliderY)
+                    ContrastX,ContrastY = self.GetOnePointOfPicture("contrast")
+                    while ContrastX !=0 and ContrastY !=0:
+                        if  ContrastYY != ContrastY:
+                            SliderY = SliderY + 3.5
+                            pyautogui.dragTo(SliderX,SliderY,1, button='left')
+                            ContrastXX = ContrastX
+                            ContrastYY = ContrastY
+                            ContrastX,ContrastY = self.GetOnePointOfPicture("contrast")
                         else:
+                            ContrastYY = ContrastY
                             break
+                else:
+                    break
 
-                        #粘贴文案
-                        pyautogui.click(ClearX-20,ClearY)
-                        pyautogui.hotkey('ctrl', 'v')
+                    # #点击添加按钮
+                    # AddContactX,AddContactY = self.GetOnePointOfPicture("AddContact")
+                    # if AddContactX != 0 or AddContactY != 0:
+                    #     pyautogui.click(AddContactX,AddContactY)
 
-                        #点击发送按钮
-                        SendX,SendY = self.GetOnePointOfPicture("Send")
-                        if SendX != 0 or SendY != 0:  
-                            pyautogui.click(SendX,SendY)
-                        else:
-                            break
-                    else:
-                        self.WriteLog("该客户以添加为好友！")
-                        continue
-        except Exception as ex_results:
-            self.WriteLog("程序终止,抓了一个异常："+ex_results,)
-            self.WriteLog('鼠标移至屏幕左上角坐标(0,0),程序中断！')
+                    #     #添加文案
+                    #     ClearX,ClearY = self.GetOnePointOfPicture("Clear")
+                    #     if ClearX != 0 or ClearY != 0:
+                    #         pyautogui.click(ClearX,ClearY)
+                    #     else:
+                    #         break
+
+                    #     #粘贴文案
+                    #     pyautogui.click(ClearX-20,ClearY)
+                    #     pyautogui.hotkey('ctrl', 'v')
+
+                    #     #点击发送按钮
+                    #     SendX,SendY = self.GetOnePointOfPicture("Send")
+                    #     if SendX != 0 or SendY != 0:  
+                    #         pyautogui.click(SendX,SendY)
+                    #     else:
+                    #         break
+                    # else:
+                    #     self.WriteLog("该客户以添加为好友！")
+                    #     continue
+        # except Exception as ex_results:
+            # print(str(ex_results))
+            # self.txthandle.write_txt(str(ex_results))
+            # self.WriteLog('鼠标移至屏幕左上角坐标(0,0),程序中断！')
 
     #添加新客户
     def AddNewCustomer(self):
@@ -164,11 +185,12 @@ class AddCustomer():
                     self.exclhandle.write_excl(phonedata[i])
                 else:
                     break
-                time.sleep(random.randint(self.configdata['time1']-10,self.configdata['time2']-10))
+                time.sleep(random.randint(self.configdata['time1']-8,self.configdata['time2']-8))
                     
                 i = i+1
         except Exception as ex_results:
-            self.WriteLog("程序终止,抓了一个异常："+ ex_results,)
+            print(str(ex_results))
+            self.txthandle.write_txt(str(ex_results))
             self.WriteLog('鼠标移至屏幕左上角坐标(0,0),程序中断！')           
 
     def GetOnePointOfPicture(self,PictureName,OTx = 0,OTy =0,X=0,Y=0,number=0,identify=''):
@@ -228,7 +250,7 @@ class AddCustomer():
         else:
             return AddPointArray
 
-    def BubbleSort(self,MemberPointArray1,MemberPointArray2,WehcatY):
+    def BubbleSort(self,MemberPointArray1,MemberPointArray2,ContrastYY):
         arr = MemberPointArray1+MemberPointArray2
         arr1 = []
 
@@ -237,7 +259,7 @@ class AddCustomer():
                 if arr[j]["pointy"] > arr[j+1]['pointy']:
                     arr[j], arr[j+1] = arr[j+1], arr[j]
         for point in arr:
-            if point["pointy"] > WehcatY:
+            if point["pointy"] > ContrastYY:
                 arr1.append(point)
         return arr1
 

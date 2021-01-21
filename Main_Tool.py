@@ -4,7 +4,6 @@ import hashlib
 import time
 import os
 import sys
-import threading
 
 from AddCustomer import AddCustomer
 # import PyQt5.sip#用于打包使用其他情况注释掉
@@ -48,7 +47,7 @@ class MY_GUI():
         self.label_time.place(x = 175, y = 100 )
         self.entry_time = Entry(self.mywindow,width = 4,textvariable = self.time2_default)
         self.entry_time.place(x=190,y=100)
-        self.label_time = Label(self.mywindow, text = '添加单个客户时间间隔不得小于11秒!')
+        self.label_time = Label(self.mywindow, text = '添加单个客户时间间隔不得小于10秒!')
         self.label_time.place(x = 225, y = 100 )
 
         self.button_ensure = Button(self.mywindow,text ="开始执行",command = self.StartWork)
@@ -77,8 +76,8 @@ class MY_GUI():
         if configdata['time1'] == 0 or configdata['time1'] == 0:
             self.text_log.insert(1.0,time.strftime("%Y-%m-%d %H:%M:%S\n", time.localtime())+"添加单个客户时间间隔不得为0!\n")
             return 
-        if configdata['time1'] <= 10:
-            self.text_log.insert(1.0,time.strftime("%Y-%m-%d %H:%M:%S\n", time.localtime())+"添加单个客户时间间隔不得小于11秒!\n")
+        if configdata['time1'] < 10:
+            self.text_log.insert(1.0,time.strftime("%Y-%m-%d %H:%M:%S\n", time.localtime())+"添加单个客户时间间隔不得小于10秒!\n")
             return
         if configdata['time2'] < configdata['time1']:
             self.text_log.insert(1.0,time.strftime("%Y-%m-%d %H:%M:%S\n", time.localtime())+"最大时间不得小于最小时间!\n")

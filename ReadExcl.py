@@ -26,7 +26,7 @@ class ReadExcl:
             newsheet.write(int(phonedata["id"]),2,"success")
             self.save_excl()
         except Exception as ex_results:
-            print("程序终止,抓了一个异常：",ex_results,)
+            print("程序终止,抓了一个异常：",ex_results)
             os._exit(0)
 
     def save_excl(self):

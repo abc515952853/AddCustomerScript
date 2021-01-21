@@ -19,7 +19,3 @@ class ReadTxt:
     
     def close_txt(self):
         self.file.close()
-
-# if __name__ == "__main__":
-#     a = ReadTxt("log")
-#     a.write_txt("1111222333")
