@@ -19,23 +19,29 @@ class AddCustomer():
     def ChooseTypeToWork(self,configdata,loghandle):
         self.configdata = configdata
         self.loghandle = loghandle
-        self.WriteLog('程序执行-开始')
+        self.WriteLog('程序执行-开始',2)
 
         if self.configdata['type'] ==1:
             self.AddNewCustomer()
         elif self.configdata['type'] ==2:
             self.AddGroupCustomer()
-        self.WriteLog('程序执行-结束')
+        self.WriteLog('程序执行-结束',2)
         return
     
-    def WriteLog(self,logdata):
-        #命令窗口展示
-        print(logdata)
-        #日志文件展示
-        self.txthandle.write_txt(logdata)
-        #客户端展示
-        self.loghandle.insert(1.0,time.strftime("%Y-%m-%d %H:%M:%S\n", time.localtime())+logdata + "\n")
-        self.loghandle.update()
+    def WriteLog(self,logdata,type=1):
+        if type ==1:
+            #命令窗口展示
+            print(logdata)
+            #日志文件展示
+            self.txthandle.write_txt(logdata)
+        elif type ==2:
+            #命令窗口展示
+            print(logdata)
+            #日志文件展示
+            self.txthandle.write_txt(logdata)
+            #客户端展示
+            self.loghandle.insert(1.0,time.strftime("%Y-%m-%d %H:%M:%S\n", time.localtime())+logdata + "\n")
+            self.loghandle.update()
         
     #添加群客户--通过滑动添加
     def AddGroupCustomer(self):
@@ -64,7 +70,7 @@ class AddCustomer():
                 if MemberPointArray == OldMemberPointArray:
                     break
                 if len(MemberPointArray) ==0:
-                    self.WriteLog('成员图片没有再屏幕出现,程序中断')
+                    self.WriteLog('成员图片没有再屏幕出现,程序中断',2)
                     return 
                 else:
                     for memberpoint in MemberPointArray:
@@ -94,7 +100,7 @@ class AddCustomer():
                             else:
                                 break
                         else:
-                            self.WriteLog("该客户以添加为好友！")
+                            self.WriteLog("该客户以添加为好友！",2)
                             continue
 
                         if memberpoint == MemberPointArray[-1]:
@@ -120,7 +126,7 @@ class AddCustomer():
         except Exception as ex_results:
             print(str(ex_results))
             self.txthandle.write_txt(str(ex_results))
-            self.WriteLog('鼠标移至屏幕左上角坐标(0,0),程序中断！')
+            self.WriteLog('鼠标移至屏幕左上角坐标(0,0),程序中断！',2)
 
     #添加新客户
     def AddNewCustomer(self):
@@ -132,6 +138,7 @@ class AddCustomer():
             SendX,SendY = 0,0
             NoPhoneX,NoPhoeY =0,0
             EnsureX,EnsureY = 0,0
+            ErrX,ErrY =0,0
 
             phonedata = self.exclhandle.get_xls_next()
             pyperclip.copy(self.configdata['word'])
@@ -140,7 +147,7 @@ class AddCustomer():
             i=0
 
             if len(phonedata) == 0:
-                self.WriteLog("没有要添加的客户，请确定手机状态为'prepare'")
+                self.WriteLog("没有要添加的客户，请确定手机状态为'prepare'",2)
             while i <len(phonedata): 
                 if self.phonecheck(phonedata[i]['phone']) is not True:
                     self.exclhandle.write_excl(phonedata[i],"failure")
@@ -164,11 +171,16 @@ class AddCustomer():
                 else:
                     break
 
+                ErrX,ErrY = self.GetOnePointOfPicture("Err",number=i+1,identify=phonedata[i]["phone"])
+                if ErrX != 0 or ErrY != 0:
+                    self.WriteLog("频繁添加，稍后再试",2)
+                    break
+
                 #鼠标点击好友添加
                 AddPointArray = self.GetAllPointOfPicture("Add")
                 if len(AddPointArray) ==0:
                     self.exclhandle.write_excl(phonedata[i],"failure")
-                    self.WriteLog('编号：'+str(i+1)+',识别号：'+phonedata[i]["phone"]+"不存在或者以添加为好友！")
+                    self.WriteLog('编号：'+str(i+1)+',识别号：'+phonedata[i]["phone"]+"不存在或者以添加为好友！",2)
                     NoPhoneX,NoPhoeY = self.GetOnePointOfPicture("NoPhone")
                     if NoPhoneX != 0 or NoPhoeY != 0:
                         EnsureX,EnsureY = self.GetOnePointOfPicture("Ensure")
@@ -195,7 +207,7 @@ class AddCustomer():
                 SendX,SendY = self.GetOnePointOfPicture("Send",number=i+1,identify=phonedata[i]["phone"])
                 if SendX != 0 or SendY != 0:  
                     pyautogui.click(SendX,SendY)
-                    self.WriteLog('编号'+str(i+1)+"成功,识别号:"+ phonedata[i]["phone"])
+                    self.WriteLog('编号'+str(i+1)+"成功,识别号:"+ phonedata[i]["phone"],2)
                     self.exclhandle.write_excl(phonedata[i],"success")
                 else:
                     break
@@ -205,7 +217,7 @@ class AddCustomer():
         except Exception as ex_results:
             print(str(ex_results))
             self.txthandle.write_txt(str(ex_results))
-            self.WriteLog('鼠标移至屏幕左上角坐标(0,0),程序中断！')           
+            self.WriteLog('鼠标移至屏幕左上角坐标(0,0),程序中断！',2)           
 
     def GetOnePointOfPicture(self,PictureName,OTx = 0,OTy =0,X=0,Y=0,number=0,identify=''):
         if X==0 and Y == 0:
