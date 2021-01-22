@@ -210,7 +210,7 @@ class AddCustomer():
                     self.WriteLog('编号'+str(i+1)+"成功,识别号:"+ phonedata[i]["phone"],2)
                     self.exclhandle.write_excl(phonedata[i],"success")
                 else:
-                    break
+                    continue
                 time.sleep(random.randint(self.configdata['time1']-8,self.configdata['time2']-8))
                     
                 i = i+1
