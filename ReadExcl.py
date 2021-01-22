@@ -18,12 +18,12 @@ class ReadExcl:
             print("程序终止,抓了一个异常：",ex_results,)
             os._exit(0)
 
-    def write_excl(self,phonedata):
+    def write_excl(self,phonedata,values):
         self.read_excl()
         try:
             self.newfile = copy(self.readfile)
             newsheet = self.newfile.get_sheet(self.exclname)
-            newsheet.write(int(phonedata["id"]),2,"success")
+            newsheet.write(int(phonedata["id"]),2,values)
             self.save_excl()
         except Exception as ex_results:
             print("程序终止,抓了一个异常：",ex_results)
@@ -55,7 +55,7 @@ class ReadExcl:
                     col[x] = sheet.cell_value(*merged.get((curRowNo,x))) ###合并单元格
 
                 s[row[x]] = self.conversion_cell(sheet,curRowNo,x,col[x])
-            if s['results'] == "failure":
+            if s['results'] == "prepare":
                 cls.append(s)  
             curRowNo += 1
         return cls
@@ -91,14 +91,7 @@ class ReadExcl:
                         mc.update({(row,col):(item[0],item[2])})
         return mc
 
-if __name__ =='__main__': 
-    aa = ReadExcl("Phone")
-    data = aa.get_xls_next()
-    i = 1
-    while i<20000:
-        aa.write_excl({"id":str(i)})
-        print(str(i))
-        i = i+1
+
 
 
 

@@ -130,13 +130,23 @@ class AddCustomer():
             AddPointArray=[]
             ClearX,ClearY =0,0
             SendX,SendY = 0,0
+            NoPhoneX,NoPhoeY =0,0
+            EnsureX,EnsureY = 0,0
 
             phonedata = self.exclhandle.get_xls_next()
             pyperclip.copy(self.configdata['word'])
 
             path = os.getcwd()
             i=0
+
+            if len(phonedata) == 0:
+                self.WriteLog("没有要添加的客户，请确定手机状态为'prepare'")
             while i <len(phonedata): 
+                if self.phonecheck(phonedata[i]['phone']) is not True:
+                    self.exclhandle.write_excl(phonedata[i],"failure")
+                    i = i+1
+                    continue
+
                 #鼠标点击添加按钮
                 AddCustomerX,AddCustomerY= self.GetOnePointOfPicture("AddCustomer",number=i+1,identify=phonedata[i]["phone"])
                 if AddCustomerX != 0 or AddCustomerY != 0:
@@ -154,13 +164,16 @@ class AddCustomer():
                 else:
                     break
 
-                pyautogui.press('enter')
-
                 #鼠标点击好友添加
                 AddPointArray = self.GetAllPointOfPicture("Add")
                 if len(AddPointArray) ==0:
+                    self.exclhandle.write_excl(phonedata[i],"failure")
                     self.WriteLog('编号：'+str(i+1)+',识别号：'+phonedata[i]["phone"]+"不存在或者以添加为好友！")
-                    i = i+1
+                    NoPhoneX,NoPhoeY = self.GetOnePointOfPicture("NoPhone")
+                    if NoPhoneX != 0 or NoPhoeY != 0:
+                        EnsureX,EnsureY = self.GetOnePointOfPicture("Ensure")
+                        pyautogui.click(EnsureX,EnsureY)      
+                    i = i +1
                     continue
                 else:
                     #点击第一个添加，通常情况下第一个为微信，第二个为企业微信
@@ -183,7 +196,7 @@ class AddCustomer():
                 if SendX != 0 or SendY != 0:  
                     pyautogui.click(SendX,SendY)
                     self.WriteLog('编号'+str(i+1)+"成功,识别号:"+ phonedata[i]["phone"])
-                    self.exclhandle.write_excl(phonedata[i])
+                    self.exclhandle.write_excl(phonedata[i],"success")
                 else:
                     break
                 time.sleep(random.randint(self.configdata['time1']-8,self.configdata['time2']-8))
@@ -263,6 +276,15 @@ class AddCustomer():
             if point["pointy"] > ContrastYY:
                 arr1.append(point)
         return arr1
+
+    def phonecheck(self,phone):
+        if len(phone) !=11:
+            return False
+        else:
+            if  phone.isdigit():
+                return True
+            else:
+                return False
 
 
 
