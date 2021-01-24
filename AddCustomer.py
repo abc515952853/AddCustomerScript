@@ -74,6 +74,7 @@ class AddCustomer():
                     self.WriteLog('成员图片没有再屏幕出现,程序中断',2)
                     return 
                 else:
+                    self.WriteLog('本页成员'+str(len(MemberPointArray))+"个",2)
                     for memberpoint in MemberPointArray:
                         #鼠标移动到成员上
                         pyautogui.click(memberpoint['pointx'],memberpoint['pointy'])
@@ -94,7 +95,7 @@ class AddCustomer():
                                 if ClearX != 0 or ClearY != 0:
                                     pyautogui.click(ClearX,ClearY)
                                 else:
-                                    break
+                                    continue
 
                                 #粘贴文案
                                 pyautogui.click(ClearX-20,ClearY)
@@ -107,7 +108,7 @@ class AddCustomer():
                                 pyautogui.click(memberpoint['pointx'],memberpoint['pointy'])
                                 num = num+1
                             else:
-                                break
+                                continue
                         else:
                             self.WriteLog("该客户以添加为好友！",2)
                             pyautogui.click(memberpoint['pointx'],memberpoint['pointy'])
@@ -127,6 +128,7 @@ class AddCustomer():
                         else:
                             ContrastYY = ContrastY
                             break
+                    continue
                 else:
                     break
         except Exception as ex_results:
@@ -156,7 +158,7 @@ class AddCustomer():
                 self.WriteLog("没有要添加的客户，请确定手机状态为'prepare'",2)
             while i <len(phonedata): 
                 if self.phonecheck(phonedata[i]['phone']) is not True:
-                    self.exclhandle.write_excl(phonedata[i],"failure")
+                    self.exclhandle.write_excl(phonedata[i],"errphone")
                     i = i+1
                     continue
 
@@ -185,7 +187,7 @@ class AddCustomer():
                 #鼠标点击好友添加
                 AddPointArray = self.GetAllPointOfPicture("Add")
                 if len(AddPointArray) ==0:
-                    self.exclhandle.write_excl(phonedata[i],"failure")
+                    self.exclhandle.write_excl(phonedata[i],"nophone")
                     self.WriteLog('编号：'+str(i+1)+',识别号：'+phonedata[i]["phone"]+"不存在或者以添加为好友！",2)
                     NoPhoneX,NoPhoeY = self.GetOnePointOfPicture("NoPhone")
                     if NoPhoneX != 0 or NoPhoeY != 0:
