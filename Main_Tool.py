@@ -14,13 +14,12 @@ class MY_GUI():
 
     def set_init_window(self):
         w = 500
-        h = 600
+        h = 550
         ws = self.mywindow.winfo_screenwidth()
         hs = self.mywindow.winfo_screenheight()
 
         self.mywindow.geometry('%dx%d+%d+%d' % (w, h, ws-w-100,hs-h-100))
         self.mywindow.title("医客通-添加客户小工具V1.0")
-        self.mywindow.configure(bg='blue') 
         self.mywindow.iconphoto(False,tk.PhotoImage(file=os.getcwd() + "\\Picture\\windowicon.png"))
         
         self.type_default = IntVar()
@@ -51,27 +50,19 @@ class MY_GUI():
         self.label_time = Label(self.mywindow, text = '添加单个客户时间间隔不得小于10秒!')
         self.label_time.place(x = 225, y = 100 )
 
-        self.label_default = IntVar()
-        self.label_label = Label(self.mywindow, text = '是否标签:')
-        self.label_label.place(x = 30, y = 140)
-        self.radiobutton_label_one = Radiobutton(self.mywindow, text='是', value=1, variable=self.label_default)
-        self.radiobutton_label_one.place(x=150,y=140)
-        self.radiobutton_label_group = Radiobutton(self.mywindow, text='否', value=2, variable=self.label_default)
-        self.radiobutton_label_group.place(x=250,y=140)
-        self.label_default.set(2)
 
         self.button_ensure = Button(self.mywindow,text ="开始执行",command = self.StartWork)
-        self.button_ensure.place(x=30,y=180)
+        self.button_ensure.place(x=30,y=140)
 
         self.label_log = Label(self.mywindow, text = '执行日志')
-        self.label_log.place(x = 30, y = 220 )
+        self.label_log.place(x = 30, y = 180 )
         self.text_log = Text(self.mywindow,width = 60)
-        self.text_log.place(x = 30, y = 250)
+        self.text_log.place(x = 30, y = 210)
 
         self.label_alert = Label(self.mywindow, text = '执行过程中，请不要移动鼠标或者操作键盘！')
-        self.label_alert.place(x = 100,y=180)
+        self.label_alert.place(x = 100,y=130)
         self.label_alert = Label(self.mywindow, text = '执行过程中，如想中断程序，请将鼠标移至屏幕左上角！')
-        self.label_alert.place(x = 100,y=200)
+        self.label_alert.place(x = 100,y=150)
 
     def StartWork(self):
         configdata = {}
@@ -79,7 +70,6 @@ class MY_GUI():
         configdata['word'] = self.word_default.get()
         configdata['time1'] = self.time1_default.get()
         configdata['time2'] = self.time2_default.get()
-        configdata['label'] = self.label_default.get()
 
         if len(configdata['word']) == 0:
             self.text_log.insert(1.0,time.strftime("%Y-%m-%d %H:%M:%S\n", time.localtime())+"请填写添加话术!\n")
