@@ -162,6 +162,7 @@ class AddCustomer():
                     time.sleep(3600) 
 
                 if self.phonecheck(phonedata[i]['phone']) is not True:
+                    self.WriteLog('编号：'+str(i+1)+',识别号：'+phonedata[i]["phone"]+"错误的号码",2)
                     self.exclhandle.write_excl(phonedata[i],"errphone")
                     i = i+1
                     continue
@@ -306,7 +307,10 @@ class AddCustomer():
             return False
         else:
             if  phone.isdigit():
-                return True
+                if phone[0:3] !="571":
+                    return True
+                else:
+                    return False
             else:
                 return False
 
