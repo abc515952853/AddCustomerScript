@@ -155,7 +155,12 @@ class AddCustomer():
 
             if len(phonedata) == 0:
                 self.WriteLog("没有要添加的客户，请确定手机状态为'prepare'",2)
-            while i <len(phonedata): 
+            while i < len(phonedata):
+                timestop = [50,100,150,200,250,300,350,400,450,500,550,600,650,700,750,800]
+                if i in timestop:
+                    self.WriteLog('第'+str(i+1)+'个客户，暂停60分钟',2)
+                    time.sleep(3600) 
+
                 if self.phonecheck(phonedata[i]['phone']) is not True:
                     self.exclhandle.write_excl(phonedata[i],"errphone")
                     i = i+1
