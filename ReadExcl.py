@@ -23,7 +23,7 @@ class ReadExcl:
         try:
             self.newfile = copy(self.readfile)
             newsheet = self.newfile.get_sheet(self.exclname)
-            newsheet.write(int(phonedata["id"]),2,values)
+            newsheet.write(int(phonedata["id"]),3,values)
             self.save_excl()
         except Exception as ex_results:
             print("程序终止,抓了一个异常：",ex_results)

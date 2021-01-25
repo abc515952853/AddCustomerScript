@@ -148,7 +148,6 @@ class AddCustomer():
             ErrX,ErrY =0,0
 
             phonedata = self.exclhandle.get_xls_next()
-            pyperclip.copy(self.configdata['word'])
 
             path = os.getcwd()
             i=0
@@ -173,7 +172,7 @@ class AddCustomer():
                     pyautogui.click(AddCustomerX,AddCustomerY)
                 else:
                     break
-
+                
                 #输入手机号
                 pyautogui.typewrite(phonedata[i]["phone"])
 
@@ -205,16 +204,17 @@ class AddCustomer():
                     pyautogui.click(AddPointArray[0]['pointx'],AddPointArray[0]['pointy'])
 
                 #添加文案，系统有记忆功能，只对前2个粘贴
-                if i <2:
-                    ClearX,ClearY = self.GetOnePointOfPicture("Clear",number=i+1,identify=phonedata[i]["phone"])
-                    if ClearX != 0 or ClearY != 0:
-                        pyautogui.click(ClearX,ClearY)
-                    else:
-                        break
+                ClearX,ClearY = self.GetOnePointOfPicture("Clear",number=i+1,identify=phonedata[i]["phone"])
+                if ClearX != 0 or ClearY != 0:
+                    pyautogui.click(ClearX,ClearY)
+                else:
+                    break
                 
-                    #粘贴文案
-                    pyautogui.click(ClearX-20,ClearY)
-                    pyautogui.hotkey('ctrl', 'v')
+                pyperclip.copy(self.configdata['word'].format(phonedata[i]['name']))
+                time.sleep(2)
+                #粘贴文案
+                pyautogui.click(ClearX-20,ClearY)
+                pyautogui.hotkey('ctrl', 'v')
 
                 #点击发送按钮
                 SendX,SendY = self.GetOnePointOfPicture("Send",number=i+1,identify=phonedata[i]["phone"])
