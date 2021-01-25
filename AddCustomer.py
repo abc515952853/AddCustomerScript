@@ -79,9 +79,8 @@ class AddCustomer():
                         #鼠标移动到成员上
                         pyautogui.click(memberpoint['pointx'],memberpoint['pointy'])
 
-                        if memberpoint == MemberPointArray[-1]:
-                            #最后一个截取图片
-                            pyautogui.screenshot(os.getcwd()+'\\Picture\\contrast.png', region=(memberpoint['pointx']-10,memberpoint['pointy']-10,90,20))
+                        #截取图片
+                        pyautogui.screenshot(os.getcwd()+'\\Picture\\contrast.png', region=(memberpoint['pointx']-10,memberpoint['pointy']-10,90,20))
 
                         #点击添加按钮
                         AddContactX,AddContactY = self.GetOnePointOfPicture("AddContact")
