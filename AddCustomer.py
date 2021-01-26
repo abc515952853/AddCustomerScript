@@ -10,7 +10,7 @@ from tkinter import *
 
 class AddCustomer():
     def __init__(self):
-        pyautogui.PAUSE = 1 # 调用在执行动作后暂停的秒数，只能在执行一些pyautogui动作后才能使用，建议用#time.sleep
+        # pyautogui.PAUSE = 1 # 调用在执行动作后暂停的秒数，只能在执行一些pyautogui动作后才能使用，建议用#time.sleep
         pyautogui.FAILSAFE = True # 启用自动防故障功能，左上角的坐标为（0，0），将鼠标移到屏幕的左上角，来抛出failSafeException异常
 
         self.exclhandle = ReadExcl("Phone")
@@ -155,9 +155,8 @@ class AddCustomer():
             if len(phonedata) == 0:
                 self.WriteLog("没有要添加的客户，请确定手机状态为'prepare'",2)
             while i < len(phonedata):
-                timestop = [50,100,150,200,250,300,350,400,450,500,550,600,650,700,750,800]
-                if i in timestop:
-                    self.WriteLog('第'+str(i+1)+'个客户，暂停60分钟',2)
+                if i >= int(self.configdata['ge']):
+                    self.WriteLog('设置执行数量已完成',2)
                     return
 
                 if self.phonecheck(phonedata[i]['phone']) is not True:
@@ -172,6 +171,8 @@ class AddCustomer():
                     pyautogui.click(AddCustomerX,AddCustomerY)
                 else:
                     break
+
+                time.sleep(random.randint(1,2))
                 
                 #输入手机号
                 pyautogui.typewrite(phonedata[i]["phone"])
@@ -203,18 +204,24 @@ class AddCustomer():
                     #点击第一个添加，通常情况下第一个为微信，第二个为企业微信
                     pyautogui.click(AddPointArray[0]['pointx'],AddPointArray[0]['pointy'])
 
-                #添加文案，系统有记忆功能，只对前2个粘贴
+                time.sleep(random.randint(1,2))
+
+                #添加文案，系统有记忆功能，
                 ClearX,ClearY = self.GetOnePointOfPicture("Clear",number=i+1,identify=phonedata[i]["phone"])
                 if ClearX != 0 or ClearY != 0:
                     pyautogui.click(ClearX,ClearY)
                 else:
                     break
+
+                time.sleep(random.randint(1,2))
                 
                 pyperclip.copy(self.configdata['word'].format(phonedata[i]['name']))
-                time.sleep(2)
+                time.sleep(random.randint(2,3))
                 #粘贴文案
                 pyautogui.click(ClearX-20,ClearY)
                 pyautogui.hotkey('ctrl', 'v')
+    
+                time.sleep(random.randint(1,2))
 
                 #点击发送按钮
                 SendX,SendY = self.GetOnePointOfPicture("Send",number=i+1,identify=phonedata[i]["phone"])
