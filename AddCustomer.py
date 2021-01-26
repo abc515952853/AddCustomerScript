@@ -158,7 +158,7 @@ class AddCustomer():
                 timestop = [50,100,150,200,250,300,350,400,450,500,550,600,650,700,750,800]
                 if i in timestop:
                     self.WriteLog('第'+str(i+1)+'个客户，暂停60分钟',2)
-                    time.sleep(3600) 
+                    return
 
                 if self.phonecheck(phonedata[i]['phone']) is not True:
                     self.WriteLog('编号：'+str(i+1)+',识别号：'+phonedata[i]["phone"]+"错误的号码",2)
@@ -224,7 +224,7 @@ class AddCustomer():
                     self.exclhandle.write_excl(phonedata[i],"success")
                 else:
                     continue
-                time.sleep(random.randint(self.configdata['time1']-8,self.configdata['time2']-8))
+                time.sleep(random.randint(self.configdata['time1']-12,self.configdata['time2']-12))
                     
                 i = i+1
         except Exception as ex_results:

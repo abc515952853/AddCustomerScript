@@ -77,8 +77,8 @@ class MY_GUI():
         if configdata['time1'] == 0 or configdata['time1'] == 0:
             self.text_log.insert(1.0,time.strftime("%Y-%m-%d %H:%M:%S\n", time.localtime())+"添加单个客户时间间隔不得为0!\n")
             return 
-        if configdata['time1'] < 10:
-            self.text_log.insert(1.0,time.strftime("%Y-%m-%d %H:%M:%S\n", time.localtime())+"添加单个客户时间间隔不得小于10秒!\n")
+        if configdata['time1'] < 12:
+            self.text_log.insert(1.0,time.strftime("%Y-%m-%d %H:%M:%S\n", time.localtime())+"添加单个客户时间间隔不得小于12秒!\n")
             return
         if configdata['time2'] < configdata['time1']:
             self.text_log.insert(1.0,time.strftime("%Y-%m-%d %H:%M:%S\n", time.localtime())+"最大时间不得小于最小时间!\n")
